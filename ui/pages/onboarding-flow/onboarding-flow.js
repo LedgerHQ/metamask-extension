@@ -8,6 +8,7 @@ import {
   ONBOARDING_CONFIRM_SRP_ROUTE,
   ONBOARDING_UNLOCK_ROUTE,
   DEFAULT_ROUTE,
+  ONBOARDING_PRIVACY_SETTINGS_ROUTE,
 } from '../../helpers/constants/routes';
 import {
   getCompletedOnboarding,
@@ -24,6 +25,7 @@ import OnboardingFlowSwitch from './onboarding-flow-switch/onboarding-flow-switc
 import NewAccount from './new-account/new-account';
 import ReviewRecoveryPhrase from './recovery-phrase/review-recovery-phrase';
 import ConfirmRecoveryPhrase from './recovery-phrase/confirm-recovery-phrase';
+import PrivacySettings from './privacy-settings/privacy-settings';
 
 export default function OnboardingFlow() {
   const [seedPhrase, setSeedPhrase] = useState('');
@@ -37,7 +39,7 @@ export default function OnboardingFlow() {
 
   useEffect(() => {
     if (process.env.ONBOARDING_V2) {
-      history.push(ONBOARDING_CREATE_PASSWORD_ROUTE);
+      history.push(ONBOARDING_PRIVACY_SETTINGS_ROUTE);
       return;
     }
 
@@ -106,6 +108,10 @@ export default function OnboardingFlow() {
             render={(routeProps) => (
               <Unlock {...routeProps} onSubmit={handleUnlock} />
             )}
+          />
+          <Route
+            path={ONBOARDING_PRIVACY_SETTINGS_ROUTE}
+            component={PrivacySettings}
           />
           <Route exact path="*" component={OnboardingFlowSwitch} />
         </Switch>

@@ -1,0 +1,16 @@
+.privacy-settings {
+  &__settings {
+
+    & a {
+      color: $Blue-500;
+      &:hover{
+        cursor: pointer;
+        color: $Blue-300;
+      }
+    }
+
+    &__toggle {
+      margin-left: 48px;
+    }
+  }
+}
