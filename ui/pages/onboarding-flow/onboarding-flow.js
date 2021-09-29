@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Unlock from '../unlock-page';
 import {
@@ -8,6 +8,7 @@ import {
   ONBOARDING_CONFIRM_SRP_ROUTE,
   ONBOARDING_UNLOCK_ROUTE,
   DEFAULT_ROUTE,
+  ONBOARDING_COMPLETION_ROUTE,
 } from '../../helpers/constants/routes';
 import {
   getCompletedOnboarding,
@@ -20,15 +21,20 @@ import {
   createNewVaultAndGetSeedPhrase,
   unlockAndGetSeedPhrase,
 } from '../../store/actions';
+import Button from '../../components/ui/button';
+import { useI18nContext } from '../../hooks/useI18nContext';
 import OnboardingFlowSwitch from './onboarding-flow-switch/onboarding-flow-switch';
 import NewAccount from './new-account/new-account';
 import ReviewRecoveryPhrase from './recovery-phrase/review-recovery-phrase';
 import ConfirmRecoveryPhrase from './recovery-phrase/confirm-recovery-phrase';
+import CreationSuccessful from './creation-successful/creation-successful';
 
 export default function OnboardingFlow() {
   const [seedPhrase, setSeedPhrase] = useState('');
   const dispatch = useDispatch();
+  const currentLocation = useLocation();
   const history = useHistory();
+  const t = useI18nContext();
   const isInitialized = useSelector(getIsInitialized);
   const isUnlocked = useSelector(getIsUnlocked);
   const completedOnboarding = useSelector(getCompletedOnboarding);
@@ -107,8 +113,24 @@ export default function OnboardingFlow() {
               <Unlock {...routeProps} onSubmit={handleUnlock} />
             )}
           />
+          <Route
+            exact
+            path={ONBOARDING_COMPLETION_ROUTE}
+            component={CreationSuccessful}
+          />
           <Route exact path="*" component={OnboardingFlowSwitch} />
         </Switch>
+        {currentLocation?.pathname === ONBOARDING_COMPLETION_ROUTE && (
+          <Button
+            className="onboarding-flow__twitter-button"
+            type="link"
+            href="https://twitter.com/MetaMask"
+            target="_blank"
+          >
+            <span>{t('followUsOnTwitter')}</span>
+            <img src="images/twitter-icon.png" />
+          </Button>
+        )}
       </div>
     </div>
   );
