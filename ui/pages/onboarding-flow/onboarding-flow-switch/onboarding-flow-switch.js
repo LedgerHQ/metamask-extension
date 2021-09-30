@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import {
   DEFAULT_ROUTE,
-  LOCK_ROUTE,
   ONBOARDING_COMPLETION_ROUTE,
   ONBOARDING_GET_STARTED_ROUTE,
   ONBOARDING_UNLOCK_ROUTE,
@@ -11,14 +10,12 @@ import {
 import {
   getCompletedOnboarding,
   getIsInitialized,
-  getIsUnlocked,
   getSeedPhraseBackedUp,
-} from '../../../selectors';
+} from '../../../ducks/metamask/metamask';
 
 export default function OnboardingFlowSwitch() {
   const completedOnboarding = useSelector(getCompletedOnboarding);
   const isInitialized = useSelector(getIsInitialized);
-  const isUnlocked = useSelector(getIsUnlocked);
   const seedPhraseBackedUp = useSelector(getSeedPhraseBackedUp);
 
   if (completedOnboarding) {
@@ -27,10 +24,6 @@ export default function OnboardingFlowSwitch() {
 
   if (seedPhraseBackedUp !== null) {
     return <Redirect to={{ pathname: ONBOARDING_COMPLETION_ROUTE }} />;
-  }
-
-  if (isUnlocked) {
-    return <Redirect to={{ pathname: LOCK_ROUTE }} />;
   }
 
   if (!isInitialized) {
